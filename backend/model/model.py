@@ -23,7 +23,7 @@ class MyModel:
         PROMPT = PROMPT_FOR_GENERATING_SLIDES_TITLE(topic , no_of_slides)
         response =  llm_generate_title.invoke([PROMPT])
         raw_response = response.content
-        list_of_topics = raw_response.split("\n")
+        list_of_topics = raw_response.replace("*" ,"").replace("#" , "").split("\n")
         return list_of_topics
     
     def generate_content_of_topics(self ,subtopics : list[str] , tone: str , depth : str ) ->str:
@@ -38,5 +38,5 @@ class MyModel:
             PROMPT = PROMPT_FOR_GENERATING_CONTENT_FOR_EACH_SLIDE(subtopic=subtopic, tone=tone , depth=depth)
             response =llm_content.invoke([PROMPT])
             raw_response = response.content
-            list_of_contents.append(raw_response)
+            list_of_contents.append(raw_response.replace("*" , "").replace("#" , ""))
         return list_of_contents
