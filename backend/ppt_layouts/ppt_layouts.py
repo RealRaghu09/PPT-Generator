@@ -34,7 +34,7 @@ class ppt:
         run.font.name = font
         run.font.color.rgb = RGBColor(*font_color)
 
-    def generate_ppt(self, topic: str, list_of_content: list[str], list_of_topics: list[str], no_of_slides: int,
+    def generate_normal_ppt(self, topic: str, list_of_content: list[str], list_of_topics: list[str], no_of_slides: int,
                      color_scheme: list[str], fontstyle: list[str]) -> str:
         prs = Presentation()
         blank_slide_layout = prs.slide_layouts[6]
@@ -103,4 +103,221 @@ class ppt:
         os.makedirs("generated_ppt", exist_ok=True)
         prs.save(filename)
 
-        return f"Generated Successfully! Saved as {filename}"
+        return {"message": f"Generated Normal Successfully! Saved as {filename}", "file_path": filename}
+    
+
+    def generate_modern_ppt(self, topic: str, list_of_content: list[str], list_of_topics: list[str], no_of_slides: int) -> str:
+        
+
+        prs = Presentation()
+        blank_slide_layout = prs.slide_layouts[6]
+
+        # Color palette: title color (accent), bg color (light/dark)
+        rgb1 = [30, 30, 30]   # Dark Gray/Black
+        rgb2 = [245, 245, 245] # Light Gray
+
+        title_font = "Montserrat"
+        content_font =  "Lato"
+
+        # First slide: Title
+        first_slide = prs.slides.add_slide(blank_slide_layout)
+        first_slide.background.fill.solid()
+        first_slide.background.fill.fore_color.rgb = RGBColor(*rgb2)
+
+        title_box = first_slide.shapes.add_textbox(Inches(1), Inches(3), Inches(8), Inches(2))
+        tf = title_box.text_frame
+        p = tf.paragraphs[0]
+        p.alignment = PP_ALIGN.CENTER
+        run = p.add_run()
+        run.text = topic
+        run.font.size = Pt(44)
+        run.font.bold = True
+        run.font.name = title_font
+        run.font.color.rgb = RGBColor(*rgb1)
+
+        # Content slides
+        for i in range(min(no_of_slides - 1, len(list_of_topics), len(list_of_content))):
+            slide = prs.slides.add_slide(blank_slide_layout)
+            slide.background.fill.solid()
+            slide.background.fill.fore_color.rgb = RGBColor(*rgb2)
+
+            # Title
+            title_box = slide.shapes.add_textbox(Inches(1), Inches(1.2), Inches(8), Inches(1))
+            title_tf = title_box.text_frame
+            p_title = title_tf.paragraphs[0]
+            p_title.alignment = PP_ALIGN.LEFT
+            run_title = p_title.add_run()
+            run_title.text = list_of_topics[i]
+            run_title.font.size = Pt(28)
+            run_title.font.bold = True
+            run_title.font.name = title_font
+            run_title.font.color.rgb = RGBColor(*rgb1)
+
+            # Content
+            content_box = slide.shapes.add_textbox(Inches(1), Inches(2.2), Inches(8.5), Inches(5))
+            content_tf = content_box.text_frame
+            content_tf.word_wrap = True
+            p_content = content_tf.paragraphs[0]
+            p_content.alignment = PP_ALIGN.LEFT
+            run_content = p_content.add_run()
+            run_content.text = list_of_content[i]
+            run_content.font.size = Pt(18)
+            run_content.font.name = content_font
+            run_content.font.color.rgb = RGBColor(*rgb1)
+
+        # Add modern-style thank you slide
+        self.add_thankyou_slide(prs, font=title_font, font_color=tuple(rgb1), bg_color=tuple(rgb2))
+
+        # Save presentation
+        timestamp = datetime.datetime.now().isoformat()
+        unique_hash = (topic + timestamp)
+        filename = f"generated_ppt/modern_presentation_{unique_hash}.pptx"
+        os.makedirs("generated_ppt", exist_ok=True)
+        prs.save(filename)
+
+        return {"message":f"Modern PPT Generated Successfully! Saved as {filename}" , "file_path" : filename}
+
+    def generate_creative_ppt(self, topic: str, list_of_content: list[str], list_of_topics: list[str], no_of_slides: int) -> str:
+        from pptx import Presentation
+        from pptx.util import Inches, Pt
+        from pptx.enum.text import PP_ALIGN
+        from pptx.dml.color import RGBColor
+        import datetime, os
+
+        prs = Presentation()
+        blank_slide_layout = prs.slide_layouts[6]
+
+        # Colors
+        rgb1 =  [255, 255, 255]  # Text
+        rgb2 =  [0, 0, 0]        # Background
+
+        title_font =  "Poppins"
+        content_font = "Comic Sans MS"
+
+        # First slide (Title slide - center aligned and bold)
+        first_slide = prs.slides.add_slide(blank_slide_layout)
+        first_slide.background.fill.solid()
+        first_slide.background.fill.fore_color.rgb = RGBColor(*rgb2)
+
+        title_box = first_slide.shapes.add_textbox(Inches(1), Inches(3), Inches(8), Inches(2.5))
+        tf = title_box.text_frame
+        p = tf.paragraphs[0]
+        p.alignment = PP_ALIGN.CENTER
+        run = p.add_run()
+        run.text = topic.upper()
+        run.font.size = Pt(48)
+        run.font.bold = True
+        run.font.name = title_font
+        run.font.color.rgb = RGBColor(*rgb1)
+
+        # Content slides
+        for i in range(min(no_of_slides - 1, len(list_of_topics), len(list_of_content))):
+            slide = prs.slides.add_slide(blank_slide_layout)
+            slide.background.fill.solid()
+            slide.background.fill.fore_color.rgb = RGBColor(*rgb2)
+
+            # Title (bold and colored)
+            title_box = slide.shapes.add_textbox(Inches(0.8), Inches(1.2), Inches(8.5), Inches(1))
+            title_tf = title_box.text_frame
+            p_title = title_tf.paragraphs[0]
+            p_title.alignment = PP_ALIGN.LEFT
+            run_title = p_title.add_run()
+            run_title.text = f"🎨 {list_of_topics[i]}"
+            run_title.font.size = Pt(32)
+            run_title.font.bold = True
+            run_title.font.name = title_font
+            run_title.font.color.rgb = RGBColor(*rgb1)
+
+            # Content (centered and expressive)
+            content_box = slide.shapes.add_textbox(Inches(1), Inches(2.5), Inches(8.5), Inches(5))
+            content_tf = content_box.text_frame
+            content_tf.word_wrap = True
+            p_content = content_tf.paragraphs[0]
+            p_content.alignment = PP_ALIGN.LEFT
+            run_content = p_content.add_run()
+            run_content.text = list_of_content[i]
+            run_content.font.size = Pt(20)
+            run_content.font.name = content_font
+            run_content.font.color.rgb = RGBColor(*rgb1)
+
+        # Add creative thank-you slide
+        self.add_thankyou_slide(prs, font=title_font, font_color=tuple(rgb1), bg_color=tuple(rgb2))
+
+        # Save file
+        timestamp = datetime.datetime.now().isoformat()
+        unique_hash = hash(topic + timestamp) % (10 ** 8)
+        filename = f"generated_ppt/creative_presentation_{unique_hash}.pptx"
+        os.makedirs("generated_ppt", exist_ok=True)
+        prs.save(filename)
+
+        return {"message" : f"Creative PPT Generated Successfully! Saved as {filename}" , "file_path" : filename}
+    def generate_retro_ppt(self, topic: str, list_of_content: list[str], list_of_topics: list[str], no_of_slides: int) -> str:
+    
+
+        prs = Presentation()
+        blank_slide_layout = prs.slide_layouts[6]
+
+        # Retro default palette (fallbacks)
+        rgb1 = [139, 69, 19]   # Saddle Brown
+        rgb2 = [255, 228, 181] # Moccasin
+
+        title_font = "Courier New"
+        content_font = "Georgia"
+
+        # First slide - Title
+        first_slide = prs.slides.add_slide(blank_slide_layout)
+        first_slide.background.fill.solid()
+        first_slide.background.fill.fore_color.rgb = RGBColor(*rgb2)
+
+        title_box = first_slide.shapes.add_textbox(Inches(1), Inches(3), Inches(8), Inches(2.5))
+        tf = title_box.text_frame
+        p = tf.paragraphs[0]
+        p.alignment = PP_ALIGN.CENTER
+        run = p.add_run()
+        run.text = topic.upper()
+        run.font.size = Pt(42)
+        run.font.bold = True
+        run.font.name = title_font
+        run.font.color.rgb = RGBColor(*rgb1)
+
+        # Content slides
+        for i in range(min(no_of_slides - 1, len(list_of_topics), len(list_of_content))):
+            slide = prs.slides.add_slide(blank_slide_layout)
+            slide.background.fill.solid()
+            slide.background.fill.fore_color.rgb = RGBColor(*rgb2)
+
+            # Title
+            title_box = slide.shapes.add_textbox(Inches(1), Inches(1.2), Inches(8), Inches(1))
+            title_tf = title_box.text_frame
+            p_title = title_tf.paragraphs[0]
+            p_title.alignment = PP_ALIGN.LEFT
+            run_title = p_title.add_run()
+            run_title.text = f"★ {list_of_topics[i]}"
+            run_title.font.size = Pt(28)
+            run_title.font.bold = True
+            run_title.font.name = title_font
+            run_title.font.color.rgb = RGBColor(*rgb1)
+
+            # Content
+            content_box = slide.shapes.add_textbox(Inches(1), Inches(2.5), Inches(8.5), Inches(5))
+            content_tf = content_box.text_frame
+            content_tf.word_wrap = True
+            p_content = content_tf.paragraphs[0]
+            p_content.alignment = PP_ALIGN.LEFT
+            run_content = p_content.add_run()
+            run_content.text = list_of_content[i]
+            run_content.font.size = Pt(18)
+            run_content.font.name = content_font
+            run_content.font.color.rgb = RGBColor(*rgb1)
+
+        # Thank You Slide
+        self.add_thankyou_slide(prs, font=title_font, font_color=tuple(rgb1), bg_color=tuple(rgb2))
+
+        # Save
+        timestamp = datetime.datetime.now().isoformat()
+        unique_hash = hash(topic + timestamp) % (10 ** 8)
+        filename = f"generated_ppt/retro_presentation_{unique_hash}.pptx"
+        os.makedirs("generated_ppt", exist_ok=True)
+        prs.save(filename)
+
+        return {"message":f"Retro PPT Generated Successfully! Saved as {filename}" , "file_path" : filename}
