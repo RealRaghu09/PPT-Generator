@@ -47,7 +47,7 @@ st.markdown("""
 
 def main():
 
-    st.markdown('<h1 class="main-header">�� PPT Generator</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">PPT Generator</h1>', unsafe_allow_html=True)
     
 
     with st.sidebar:
@@ -56,7 +56,7 @@ def main():
         topic = st.text_input("📝 Topic", placeholder="Enter your presentation topic...")
         
         # Number of slides
-        slides = st.number_input("�� Number of Slides", min_value=1, max_value=20, value=5)
+        slides = st.number_input("Number of Slides", min_value=1, max_value=20, value=5)
         
         layout_options = ["normal", "creative", "modern", "retro"]
         layout = st.selectbox("🎨 Layout Style", layout_options, index=0)
@@ -169,12 +169,12 @@ def main():
                     
                     st.markdown(f"""
                     <div class="download-link">
-                        <h4>🎉 Your presentation is ready!</h4>
-                        <p>Click the link below to download your {layout.title()} presentation:</p>
+                        <h4 style="color : black;">🎉 Your presentation is ready!</h4>
+                        <p style="color : black;">Click the link below to download your {layout.title()} presentation:</p>
                         <a href="{download_link}" download="presentation.pptx" style="
                             display: inline-block;
                             background-color: #1f77b4;
-                            color: white;
+                            color: black;
                             padding: 0.75rem 1.5rem;
                             text-decoration: none;
                             border-radius: 0.5rem;
