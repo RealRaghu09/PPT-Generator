@@ -15,7 +15,7 @@ User can download the ppt   /download/{abc.pptx} link to download
 
 ## Working
 User sends the data as topic 
-topic is sent to get the subtopics for each page 
+topic is sent to get the subtopics for each page  Done 👍 ✔️
 get sub-topics
 get content for every sub-content
 put the content and sub topics into the layouts 
@@ -23,3 +23,6 @@ put the content and sub topics into the layouts
 
 preview the pptx 
 get the link to the pptx 
+
+
+# select only two color_scheme
