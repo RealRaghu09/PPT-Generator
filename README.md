@@ -1,5 +1,5 @@
 ## Frontend 
-Link :-  https://ppt-generator-ai-u7a5.onrender.com
+Link :-  https://ppt-generator-7n2q.onrender.com/
 User is allowed to enter the Topic 
 User is Allowed to enter the number of slides 
 User is allowed to select the ppt layout of ppt in a list 
