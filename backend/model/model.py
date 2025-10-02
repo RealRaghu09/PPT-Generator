@@ -15,7 +15,7 @@ class MyModel:
     
     def generate_title_of_slides(self , topic : str , no_of_slides : int)-> list:
         llm_generate_title = ChatGoogleGenerativeAI(
-            model = "gemini-1.5-flash",
+            model = "gemini-2.5-flash-lite",
             temperature=0,
             max_tokens = 200,
             google_api_key=os.getenv('GOOGLE_API_KEY')
@@ -28,7 +28,7 @@ class MyModel:
     
     def generate_content_of_topics(self ,subtopics : list[str] , tone: str , depth : str ) ->str:
         llm_content = ChatGoogleGenerativeAI(
-            model ="gemini-1.5-flash",
+            model ="gemini-2.5-flash-lite",
             temperature = 0.5,
             max_tokens = 250,
             google_api_key=os.getenv('GOOGLE_API_KEY')
