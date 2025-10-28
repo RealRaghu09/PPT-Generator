@@ -7,6 +7,9 @@ import datetime
 import os
 
 class ppt:
+    def __init__(self):
+        # Holds transient data for the current generation request
+        self.collected_data = []
     def extract_rgb_values(self, color: str):
         try:
             rgb_value = webcolors.name_to_rgb(color.lower())
@@ -25,6 +28,7 @@ class ppt:
         # Add centered "Thank You"
         box = slide.shapes.add_textbox(Inches(1), Inches(2.5), Inches(8), Inches(2))
         tf = box.text_frame
+        tf.auto_size = True
         p = tf.paragraphs[0]
         p.alignment = PP_ALIGN.CENTER
         run = p.add_run()
@@ -36,6 +40,16 @@ class ppt:
 
     def generate_normal_ppt(self, topic: str, list_of_content: list[str], list_of_topics: list[str], no_of_slides: int,
                      color_scheme: list[str], fontstyle: list[str]) -> str:
+        # Collect input data for this generation
+        self.collected_data.append({
+            "style": "normal",
+            "topic": topic,
+            "list_of_topics": list_of_topics,
+            "list_of_content": list_of_content,
+            "no_of_slides": no_of_slides,
+            "color_scheme": color_scheme,
+            "fontstyle": fontstyle,
+        })
         prs = Presentation()
         blank_slide_layout = prs.slide_layouts[6]
 
@@ -51,6 +65,7 @@ class ppt:
         first_slide = prs.slides.add_slide(blank_slide_layout)
         title_shape = first_slide.shapes.add_textbox(Inches(1), Inches(2.5), Inches(8), Inches(2))
         tf = title_shape.text_frame
+        tf.auto_size = True
         p = tf.paragraphs[0]
         p.alignment = PP_ALIGN.CENTER
         run = p.add_run()
@@ -71,6 +86,7 @@ class ppt:
             # Title
             title_box = slide.shapes.add_textbox(Inches(1), Inches(0.8), Inches(8), Inches(1))
             title_tf = title_box.text_frame
+            title_tf.auto_size = True
             p_title = title_tf.paragraphs[0]
             p_title.alignment = PP_ALIGN.CENTER
             run_title = p_title.add_run()
@@ -84,6 +100,7 @@ class ppt:
             # New line (adds more vertical gap between title and content)
             content_box = slide.shapes.add_textbox(Inches(1), Inches(2.2), Inches(8), Inches(5))
             content_tf = content_box.text_frame
+            content_tf.auto_size = True
             p_content = content_tf.paragraphs[0]
             p_content.alignment = PP_ALIGN.CENTER
             run_content = p_content.add_run()
@@ -103,11 +120,21 @@ class ppt:
         os.makedirs("generated_ppt", exist_ok=True)
         prs.save(filename)
 
+        # Clear transient data after generation completes
+        self.collected_data.clear()
+
         return {"message": f"Generated Normal Successfully! Saved as {filename}", "file_path": filename}
     
 
     def generate_modern_ppt(self, topic: str, list_of_content: list[str], list_of_topics: list[str], no_of_slides: int) -> str:
-        
+        # Collect input data for this generation
+        self.collected_data.append({
+            "style": "modern",
+            "topic": topic,
+            "list_of_topics": list_of_topics,
+            "list_of_content": list_of_content,
+            "no_of_slides": no_of_slides,
+        })
 
         prs = Presentation()
         blank_slide_layout = prs.slide_layouts[6]
@@ -126,6 +153,7 @@ class ppt:
 
         title_box = first_slide.shapes.add_textbox(Inches(1), Inches(3), Inches(8), Inches(2))
         tf = title_box.text_frame
+        tf.auto_size = True
         p = tf.paragraphs[0]
         p.alignment = PP_ALIGN.CENTER
         run = p.add_run()
@@ -144,6 +172,7 @@ class ppt:
             # Title
             title_box = slide.shapes.add_textbox(Inches(1), Inches(1.2), Inches(8), Inches(1))
             title_tf = title_box.text_frame
+            title_tf.auto_size = True
             p_title = title_tf.paragraphs[0]
             p_title.alignment = PP_ALIGN.LEFT
             run_title = p_title.add_run()
@@ -157,6 +186,7 @@ class ppt:
             content_box = slide.shapes.add_textbox(Inches(1), Inches(2.2), Inches(8.5), Inches(5))
             content_tf = content_box.text_frame
             content_tf.word_wrap = True
+            content_tf.auto_size = True
             p_content = content_tf.paragraphs[0]
             p_content.alignment = PP_ALIGN.LEFT
             run_content = p_content.add_run()
@@ -174,10 +204,21 @@ class ppt:
         filename = f"generated_ppt/modern_presentation_{unique_hash}.pptx"
         os.makedirs("generated_ppt", exist_ok=True)
         prs.save(filename)
+        
+        # Clear transient data after generation completes
+        self.collected_data.clear()
 
         return {"message":f"Modern PPT Generated Successfully! Saved as {filename}" , "file_path" : filename}
 
     def generate_creative_ppt(self, topic: str, list_of_content: list[str], list_of_topics: list[str], no_of_slides: int) -> str:
+        # Collect input data for this generation
+        self.collected_data.append({
+            "style": "creative",
+            "topic": topic,
+            "list_of_topics": list_of_topics,
+            "list_of_content": list_of_content,
+            "no_of_slides": no_of_slides,
+        })
         from pptx import Presentation
         from pptx.util import Inches, Pt
         from pptx.enum.text import PP_ALIGN
@@ -201,6 +242,7 @@ class ppt:
 
         title_box = first_slide.shapes.add_textbox(Inches(1), Inches(3), Inches(8), Inches(2.5))
         tf = title_box.text_frame
+        tf.auto_size = True
         p = tf.paragraphs[0]
         p.alignment = PP_ALIGN.CENTER
         run = p.add_run()
@@ -219,6 +261,7 @@ class ppt:
             # Title (bold and colored)
             title_box = slide.shapes.add_textbox(Inches(0.8), Inches(1.2), Inches(8.5), Inches(1))
             title_tf = title_box.text_frame
+            title_tf.auto_size = True
             p_title = title_tf.paragraphs[0]
             p_title.alignment = PP_ALIGN.LEFT
             run_title = p_title.add_run()
@@ -232,6 +275,7 @@ class ppt:
             content_box = slide.shapes.add_textbox(Inches(1), Inches(2.5), Inches(8.5), Inches(5))
             content_tf = content_box.text_frame
             content_tf.word_wrap = True
+            content_tf.auto_size = True
             p_content = content_tf.paragraphs[0]
             p_content.alignment = PP_ALIGN.LEFT
             run_content = p_content.add_run()
@@ -249,10 +293,20 @@ class ppt:
         filename = f"generated_ppt/creative_presentation_{unique_hash}.pptx"
         os.makedirs("generated_ppt", exist_ok=True)
         prs.save(filename)
+        
+        # Clear transient data after generation completes
+        self.collected_data.clear()
 
         return {"message" : f"Creative PPT Generated Successfully! Saved as {filename}" , "file_path" : filename}
     def generate_retro_ppt(self, topic: str, list_of_content: list[str], list_of_topics: list[str], no_of_slides: int) -> str:
-    
+        # Collect input data for this generation
+        self.collected_data.append({
+            "style": "retro",
+            "topic": topic,
+            "list_of_topics": list_of_topics,
+            "list_of_content": list_of_content,
+            "no_of_slides": no_of_slides,
+        })
 
         prs = Presentation()
         blank_slide_layout = prs.slide_layouts[6]
@@ -271,6 +325,7 @@ class ppt:
 
         title_box = first_slide.shapes.add_textbox(Inches(1), Inches(3), Inches(8), Inches(2.5))
         tf = title_box.text_frame
+        tf.auto_size = True
         p = tf.paragraphs[0]
         p.alignment = PP_ALIGN.CENTER
         run = p.add_run()
@@ -289,6 +344,7 @@ class ppt:
             # Title
             title_box = slide.shapes.add_textbox(Inches(1), Inches(1.2), Inches(8), Inches(1))
             title_tf = title_box.text_frame
+            title_tf.auto_size = True
             p_title = title_tf.paragraphs[0]
             p_title.alignment = PP_ALIGN.LEFT
             run_title = p_title.add_run()
@@ -302,6 +358,7 @@ class ppt:
             content_box = slide.shapes.add_textbox(Inches(1), Inches(2.5), Inches(8.5), Inches(5))
             content_tf = content_box.text_frame
             content_tf.word_wrap = True
+            content_tf.auto_size = True
             p_content = content_tf.paragraphs[0]
             p_content.alignment = PP_ALIGN.LEFT
             run_content = p_content.add_run()
@@ -319,5 +376,8 @@ class ppt:
         filename = f"generated_ppt/retro_presentation_{unique_hash}.pptx"
         os.makedirs("generated_ppt", exist_ok=True)
         prs.save(filename)
+        
+        # Clear transient data after generation completes
+        self.collected_data.clear()
 
         return {"message":f"Retro PPT Generated Successfully! Saved as {filename}" , "file_path" : filename}
