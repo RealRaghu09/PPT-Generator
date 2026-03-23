@@ -5,7 +5,9 @@ from Prompts.PromptSlides import PROMPT_FOR_GENERATING_CONTENT_FOR_EACH_SLIDE , 
 
 # Load environment variables
 load_dotenv()
-
+MODEL_NAME = 'gemini-2.5-flash'
+TEMPERATURE = 0
+MAX_TOKENS = 200
 class MyModel:
     def __init__(self):
         # Check if API key is available
@@ -15,9 +17,9 @@ class MyModel:
     
     def generate_title_of_slides(self , topic : str , no_of_slides : int)-> list:
         llm_generate_title = ChatGoogleGenerativeAI(
-            model = "gemini-2.0-flash",
-            temperature=0,
-            max_tokens = 200,
+            model = MODEL_NAME,
+            temperature=TEMPERATURE,
+            max_tokens = MAX_TOKENS,
             google_api_key=os.getenv('GOOGLE_API_KEY')
         )
         PROMPT = PROMPT_FOR_GENERATING_SLIDES_TITLE(topic , no_of_slides)
@@ -28,7 +30,7 @@ class MyModel:
     
     def generate_content_of_topics(self ,subtopics : list[str] , tone: str , depth : str ) ->str:
         llm_content = ChatGoogleGenerativeAI(
-            model ="gemini-2.0-flash",
+            model =MODEL_NAME,
             temperature = 0.5,
             max_tokens = 250,
             google_api_key=os.getenv('GOOGLE_API_KEY')
